@@ -1,0 +1,24 @@
+{
+    "namespace": "",
+    "taskName": "",
+    "input": {
+      "path": "/api?chainid={chainid}&module={module}&action={action}&address={address}&contractaddress={contractAddress}&startblock={startBlock}&endblock={endBlock}&page={page}&offset={offset}&sort={sort}&apikey={apiKey}",
+      "method": "GET",
+      "params": {
+        "chainid": 1,
+        "module": "account",
+        "action": "tokentx",
+        "address": "0x0B5Ad19cbE540d3607568C3db37a010BBE6c8134",
+        "contractAddress": "0x9Adc7710E9d1b29d8a78c04d52D32532297C2Ef3",
+        "startBlock": 7284270,
+        "endBlock": 99999999,
+        "page": 1,
+        "offset": 100,
+        "sort": "desc",
+        "apiKey": ""
+      }
+    },
+    "executionTimeout": 10000,
+    "async": false
+  }
+  

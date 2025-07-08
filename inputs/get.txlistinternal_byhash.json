@@ -1,0 +1,17 @@
+{
+  "namespace": "",
+  "taskName": "",
+  "input": {
+    "path": "/api?chainid={chainid}&module={module}&action={action}&txhash={txhash}&apikey={apiKey}",
+    "method": "GET",
+    "params": {
+      "chainid": 1,
+      "module": "account",
+      "action": "txlistinternal",
+      "txhash": "0x51e42540834734c61fbcca53352ca73102059072b8dd0399a3137e6324678ed4",
+      "apiKey": ""
+    }
+  },
+  "executionTimeout": 10000,
+  "async": false
+}

@@ -1,0 +1,1236 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Etherscan V2 API - Accounts",
+    "description": "API for retrieving account-related data from Etherscan V2, including native and token balances, transactions, and block validation details for EVM-compatible blockchains. Source attribution (e.g., 'Powered by Etherscan.io APIs') is required for non-private use, as per Etherscan's terms (https://docs.etherscan.io).",
+    "version": "2.0.0",
+    "contact": {
+      "name": "Etherscan Support",
+      "url": "https://etherscan.io/contactus"
+    },
+    "license": {
+      "name": "Etherscan Terms of Service",
+      "url": "https://etherscan.io/terms"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.etherscan.io/v2",
+      "description": "Etherscan V2 API base URL"
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "paths": {
+    "/api": {
+      "get": {
+        "operationId": "getAccountData",
+        "tags": ["Accounts"],
+        "summary": "Retrieve account-related data",
+        "description": "Fetches data such as balances, transactions, token transfers, or validated blocks for an address on an EVM-compatible chain, based on the action parameter.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/chainid"
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["account"],
+              "default": "account"
+            },
+            "description": "API module for account-related endpoints."
+          },
+          {
+            "name": "action",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["balance", "balancemulti", "txlist", "txlistinternal", "tokentx", "tokennfttx", "token1155tx", "fundedby", "getminedblocks"]
+            },
+            "description": "Action to perform: balance (native balance), balancemulti (multiple addresses), txlist (normal transactions), txlistinternal (internal transactions), tokentx (ERC20 transfers), tokennfttx (ERC721 transfers), token1155tx (ERC1155 transfers), fundedby (funding transactions), getminedblocks (validated blocks)."
+          },
+          {
+            "$ref": "#/components/parameters/address"
+          },
+          {
+            "$ref": "#/components/parameters/contractaddress"
+          },
+          {
+            "$ref": "#/components/parameters/txhash"
+          },
+          {
+            "$ref": "#/components/parameters/startblock"
+          },
+          {
+            "$ref": "#/components/parameters/endblock"
+          },
+          {
+            "$ref": "#/components/parameters/blockno"
+          },
+          {
+            "$ref": "#/components/parameters/tag"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "$ref": "#/components/parameters/blocktype"
+          },
+          {
+            "$ref": "#/components/parameters/apikey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with account data.",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Maximum number of requests allowed per time period."
+              },
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Number of requests remaining in the current time period."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/BalanceResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MultiBalanceResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TransactionResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/InternalTransactionResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TokenTransferResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/NFTTransferResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ERC1155TransferResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/FundedByResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MinedBlocksResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters, such as invalid address, chainid, or API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "status": "0",
+                  "message": "Invalid address format",
+                  "result": null
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded for the API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "status": "0",
+                  "message": "Rate limit exceeded",
+                  "result": null
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apikey"
+      }
+    },
+    "parameters": {
+      "chainid": {
+        "name": "chainid",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "example": 1,
+          "description": "Chain ID of the EVM-compatible blockchain (e.g., 1 for Ethereum Mainnet, 42161 for Arbitrum, 8453 for Base, 137 for Polygon)."
+        },
+        "description": "Identifies the target blockchain."
+      },
+      "address": {
+        "name": "address",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "0x0B5Ad19cbE540d3607568C3db37a010BBE6c8134",
+          "description": "Single address or comma-separated list of up to 20 addresses (for balancemulti)."
+        },
+        "description": "The address(es) to query."
+      },
+      "contractaddress": {
+        "name": "contractaddress",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{40}$",
+          "example": "0x9Adc7710E9d1b29d8a78c04d52d32532297C2Ef3"
+        },
+        "description": "Token contract address to filter token data (optional for tokentx, tokennfttx, token1155tx)."
+      },
+      "txhash": {
+        "name": "txhash",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "pattern": "^0x[a-fA-F0-9]{64}$",
+          "example": "0x51e42540834734c61fbcca53352ca73102059072b8dd0399a3137e6324678ed4"
+        },
+        "description": "Transaction hash for internal transactions (required for txlistinternal with txhash)."
+      },
+      "startblock": {
+        "name": "startblock",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "example": 7284270
+        },
+        "description": "Starting block number to search (inclusive)."
+      },
+      "endblock": {
+        "name": "endblock",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "example": 99999999
+        },
+        "description": "Ending block number to search (inclusive)."
+      },
+      "blockno": {
+        "name": "blockno",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "example": 7284270
+        },
+        "description": "Block number to query balance at (optional for balance, balancemulti)."
+      },
+      "tag": {
+        "name": "tag",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": ["earliest", "pending", "latest"]
+        },
+        "description": "the string pre-defined block parameter, either earliest, pending or latest"
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "example": 1
+        },
+        "description": "Page number for paginated results."
+      },
+      "offset": {
+        "name": "offset",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "example": 100
+        },
+        "description": "Number of records per page (max 1000 for free API plans)."
+      },
+      "sort": {
+        "name": "sort",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": ["asc", "desc"],
+          "default": "asc"
+        },
+        "description": "Sort order of results (ascending or descending)."
+      },
+      "blocktype": {
+        "name": "blocktype",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": ["blocks"],
+          "default": "blocks"
+        },
+        "description": "Type of blocks to query (used for getminedblocks)."
+      },
+      "apikey": {
+        "name": "apikey",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "YourApiKeyToken"
+        },
+        "description": "Etherscan API key for authentication."
+      }
+    },
+    "schemas": {
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "1",
+            "description": "Status of the response (1 for success, 0 for error)."
+          },
+          "message": {
+            "type": "string",
+            "example": "OK",
+            "description": "Response message."
+          },
+          "result": {
+            "type": "string",
+            "example": "4080717859742745095632",
+            "description": "Balance in the smallest unit (e.g., wei for ETH).",
+            "nullable": true
+          }
+        },
+        "required": ["status", "message", "result"]
+      },
+      "MultiBalanceResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "1",
+            "description": "Status of the response (1 for success, 0 for error)."
+          },
+          "message": {
+            "type": "string",
+            "example": "OK",
+            "description": "Response message."
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "account": {
+                  "type": "string",
+                  "example": "0x0B5Ad19cbE540d3607568C3db37a010BBE6c8134",
+                  "description": "Address queried."
+                },
+                "balance": {
+                  "type": "string",
+                  "example": "4080717859742745095632",
+                  "description": "Balance in wei."
+                }
+              },
+              "required": ["account", "balance"]
+            },
+            "description": "List of address-balance pairs."
+          }
+        },
+        "required": ["status", "message", "result"]
+      },
+      "TransactionResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "1",
+            "description": "Status of the response (1 for success, 0 for error)."
+          },
+          "message": {
+            "type": "string",
+            "example": "OK",
+            "description": "Response message."
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            },
+            "description": "List of normal transactions."
+          }
+        },
+        "required": ["status", "message", "result"]
+      },
+      "InternalTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "1",
+            "description": "Status of the response (1 for success, 0 for error)."
+          },
+          "message": {
+            "type": "string",
+            "example": "OK",
+            "description": "Response message."
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InternalTransaction"
+            },
+            "description": "List of internal transactions."
+          }
+        },
+        "required": ["status", "message", "result"]
+      },
+      "TokenTransferResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "1",
+            "description": "Status of the response (1 for success, 0 for error)."
+          },
+          "message": {
+            "type": "string",
+            "example": "OK",
+            "description": "Response message."
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TokenTransferEvent"
+            },
+            "description": "List of ERC20 token transfer events."
+          }
+        },
+        "required": ["status", "message", "result"]
+      },
+      "NFTTransferResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "1",
+            "description": "Status of the response (1 for success, 0 for error)."
+          },
+          "message": {
+            "type": "string",
+            "example": "OK",
+            "description": "Response message."
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NFTTransferEvent"
+            },
+            "description": "List of ERC721 token transfer events."
+          }
+        },
+        "required": ["status", "message", "result"]
+      },
+      "ERC1155TransferResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "1",
+            "description": "Status of the response (1 for success, 0 for error)."
+          },
+          "message": {
+            "type": "string",
+            "example": "OK",
+            "description": "Response message."
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ERC1155TransferEvent"
+            },
+            "description": "List of ERC1155 token transfer events."
+          }
+        },
+        "required": ["status", "message", "result"]
+      },
+      "FundedByResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "1",
+            "description": "Status of the response (1 for success, 0 for error)."
+          },
+          "message": {
+            "type": "string",
+            "example": "OK",
+            "description": "Response message."
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FundingTransaction"
+            },
+            "description": "List of funding transactions."
+          }
+        },
+        "required": ["status", "message", "result"]
+      },
+      "MinedBlocksResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "1",
+            "description": "Status of the response (1 for success, 0 for error)."
+          },
+          "message": {
+            "type": "string",
+            "example": "OK",
+            "description": "Response message."
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MinedBlock"
+            },
+            "description": "List of blocks validated by the address."
+          }
+        },
+        "required": ["status", "message", "result"]
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "blockNumber": {
+            "type": "string",
+            "example": "19436867",
+            "description": "Block number of the transaction."
+          },
+          "timeStamp": {
+            "type": "string",
+            "example": "1710463487",
+            "description": "UNIX timestamp of the transaction."
+          },
+          "hash": {
+            "type": "string",
+            "example": "0x51e42540834734c61fbcca53352ca73102059072b8dd0399a3137e6324678ed4",
+            "description": "Transaction hash."
+          },
+          "nonce": {
+            "type": "string",
+            "example": "84",
+            "description": "Transaction nonce.",
+            "nullable": true
+          },
+          "blockHash": {
+            "type": "string",
+            "example": "0xd381d647a0ab0ec6fecbc4528bc881a4a2c1715ac8a7f300136a62a9ec5c3d11",
+            "description": "Hash of the block.",
+            "nullable": true
+          },
+          "transactionIndex": {
+            "type": "string",
+            "example": "0",
+            "description": "Index of the transaction in the block.",
+            "nullable": true
+          },
+          "from": {
+            "type": "string",
+            "example": "0xfb3b5a0e03ae12c41492d70bd210e65d25cc01dc",
+            "description": "Sender address."
+          },
+          "to": {
+            "type": "string",
+            "example": "0x0b5ad19cbe540d3607568c3db37a010bbe6c8134",
+            "description": "Recipient address."
+          },
+          "value": {
+            "type": "string",
+            "example": "1000000000000000000",
+            "description": "Value transferred in wei."
+          },
+          "gas": {
+            "type": "string",
+            "example": "862860",
+            "description": "Gas provided.",
+            "nullable": true
+          },
+          "gasPrice": {
+            "type": "string",
+            "example": "44339373968",
+            "description": "Gas price in wei.",
+            "nullable": true
+          },
+          "isError": {
+            "type": "string",
+            "example": "0",
+            "description": "1 if transaction failed, 0 if successful.",
+            "nullable": true
+          },
+          "txreceipt_status": {
+            "type": "string",
+            "example": "1",
+            "description": "Receipt status (1 for success, 0 for failure).",
+            "nullable": true
+          },
+          "input": {
+            "type": "string",
+            "example": "0x",
+            "description": "Transaction input data.",
+            "nullable": true
+          },
+          "contractAddress": {
+            "type": "string",
+            "example": "",
+            "description": "Contract address created, if any.",
+            "nullable": true
+          },
+          "cumulativeGasUsed": {
+            "type": "string",
+            "example": "812811",
+            "description": "Cumulative gas used in the block.",
+            "nullable": true
+          },
+          "gasUsed": {
+            "type": "string",
+            "example": "812811",
+            "description": "Gas used by the transaction.",
+            "nullable": true
+          },
+          "confirmations": {
+            "type": "string",
+            "example": "3328937",
+            "description": "Number of block confirmations.",
+            "nullable": true
+          }
+        },
+        "required": [
+          "blockNumber",
+          "timeStamp",
+          "hash",
+          "from",
+          "to",
+          "value"
+        ]
+      },
+      "InternalTransaction": {
+        "type": "object",
+        "properties": {
+          "blockNumber": {
+            "type": "string",
+            "example": "19436867",
+            "description": "Block number of the transaction."
+          },
+          "timeStamp": {
+            "type": "string",
+            "example": "1710463487",
+            "description": "UNIX timestamp of the transaction."
+          },
+          "hash": {
+            "type": "string",
+            "example": "0x51e42540834734c61fbcca53352ca73102059072b8dd0399a3137e6324678ed4",
+            "description": "Transaction hash."
+          },
+          "from": {
+            "type": "string",
+            "example": "0xfb3b5a0e03ae12c41492d70bd210e65d25cc01dc",
+            "description": "Sender address."
+          },
+          "to": {
+            "type": "string",
+            "example": "0x0b5ad19cbe540d3607568C3db37a010bbe6c8134",
+            "description": "Recipient address."
+          },
+          "value": {
+            "type": "string",
+            "example": "1000000000000000000",
+            "description": "Value transferred in wei."
+          },
+          "contractAddress": {
+            "type": "string",
+            "example": "",
+            "description": "Contract address, if any.",
+            "nullable": true
+          },
+          "input": {
+            "type": "string",
+            "example": "0x",
+            "description": "Input data.",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "example": "call",
+            "description": "Type of internal transaction (e.g., call, create).",
+            "nullable": true
+          },
+          "gas": {
+            "type": "string",
+            "example": "862860",
+            "description": "Gas provided.",
+            "nullable": true
+          },
+          "gasUsed": {
+            "type": "string",
+            "example": "812811",
+            "description": "Gas used.",
+            "nullable": true
+          },
+          "isError": {
+            "type": "string",
+            "example": "0",
+            "description": "1 if transaction failed, 0 if successful.",
+            "nullable": true
+          },
+          "errCode": {
+            "type": "string",
+            "example": "",
+            "description": "Error code, if any.",
+            "nullable": true
+          }
+        },
+        "required": [
+          "blockNumber",
+          "timeStamp",
+          "hash",
+          "from",
+          "to",
+          "value"
+        ]
+      },
+      "TokenTransferEvent": {
+        "type": "object",
+        "properties": {
+          "blockNumber": {
+            "type": "string",
+            "example": "19436867",
+            "description": "Block number where the transfer occurred."
+          },
+          "timeStamp": {
+            "type": "string",
+            "example": "1710463487",
+            "description": "UNIX timestamp of the transfer."
+          },
+          "hash": {
+            "type": "string",
+            "example": "0x51e42540834734c61fbcca53352ca73102059072b8dd0399a3137e6324678ed4",
+            "description": "Transaction hash."
+          },
+          "nonce": {
+            "type": "string",
+            "example": "84",
+            "description": "Transaction nonce.",
+            "nullable": true
+          },
+          "blockHash": {
+            "type": "string",
+            "example": "0xd381d647a0ab0ec6fecbc4528bc881a4a2c1715ac8a7f300136a62a9ec5c3d11",
+            "description": "Hash of the block.",
+            "nullable": true
+          },
+          "from": {
+            "type": "string",
+            "example": "0xfb3b5a0e03ae12c41492d70bd210e65d25cc01dc",
+            "description": "Sender address."
+          },
+          "contractAddress": {
+            "type": "string",
+            "example": "0x9adc7710e9d1b29d8a78c04d52d32532297c2ef3",
+            "description": "Token contract address."
+          },
+          "to": {
+            "type": "string",
+            "example": "0x0b5ad19cbe540d3607568C3db37a010bbe6c8134",
+            "description": "Recipient address."
+          },
+          "value": {
+            "type": "string",
+            "example": "330071074346003490203562",
+            "description": "Amount of tokens transferred (in smallest unit)."
+          },
+          "tokenName": {
+            "type": "string",
+            "example": "QuadransToken",
+            "description": "Name of the token."
+          },
+          "tokenSymbol": {
+            "type": "string",
+            "example": "QDT",
+            "description": "Symbol of the token."
+          },
+          "tokenDecimal": {
+            "type": "string",
+            "example": "18",
+            "description": "Decimal places of the token."
+          },
+          "transactionIndex": {
+            "type": "string",
+            "example": "0",
+            "description": "Index of the transaction in the block.",
+            "nullable": true
+          },
+          "gas": {
+            "type": "string",
+            "example": "862860",
+            "description": "Gas provided.",
+            "nullable": true
+          },
+          "gasPrice": {
+            "type": "string",
+            "example": "44339373968",
+            "description": "Gas price in wei.",
+            "nullable": true
+          },
+          "gasUsed": {
+            "type": "string",
+            "example": "812811",
+            "description": "Gas used.",
+            "nullable": true
+          },
+          "cumulativeGasUsed": {
+            "type": "string",
+            "example": "812811",
+            "description": "Cumulative gas used in the block.",
+            "nullable": true
+          },
+          "input": {
+            "type": "string",
+            "example": "deprecated",
+            "description": "Input data (may be marked as deprecated).",
+            "nullable": true
+          },
+          "methodId": {
+            "type": "string",
+            "example": "0xa76dfc3b",
+            "description": "Method ID of the transaction.",
+            "nullable": true
+          },
+          "functionName": {
+            "type": "string",
+            "example": "ethUnoswap(uint256 minReturn,uint256 dex)",
+            "description": "Name and parameters of the function called.",
+            "nullable": true
+          },
+          "confirmations": {
+            "type": "string",
+            "example": "3328937",
+            "description": "Number of block confirmations.",
+            "nullable": true
+          }
+        },
+        "required": [
+          "blockNumber",
+          "timeStamp",
+          "hash",
+          "from",
+          "contractAddress",
+          "to",
+          "value",
+          "tokenName",
+          "tokenSymbol",
+          "tokenDecimal"
+        ]
+      },
+      "NFTTransferEvent": {
+        "type": "object",
+        "properties": {
+          "blockNumber": {
+            "type": "string",
+            "example": "19436867",
+            "description": "Block number where the transfer occurred."
+          },
+          "timeStamp": {
+            "type": "string",
+            "example": "1710463487",
+            "description": "UNIX timestamp of the transfer."
+          },
+          "hash": {
+            "type": "string",
+            "example": "0x51e42540834734c61fbcca53352ca73102059072b8dd0399a3137e6324678ed4",
+            "description": "Transaction hash."
+          },
+          "nonce": {
+            "type": "string",
+            "example": "84",
+            "description": "Transaction nonce.",
+            "nullable": true
+          },
+          "blockHash": {
+            "type": "string",
+            "example": "0xd381d647a0ab0ec6fecbc4528bc881a4a2c1715ac8a7f300136a62a9ec5c3d11",
+            "description": "Hash of the block.",
+            "nullable": true
+          },
+          "from": {
+            "type": "string",
+            "example": "0xfb3b5a0e03ae12c41492d70bd210e65d25cc01dc",
+            "description": "Sender address."
+          },
+          "contractAddress": {
+            "type": "string",
+            "example": "0x9adc7710e9d1b29d8a78c04d52d32532297c2ef3",
+            "description": "NFT contract address."
+          },
+          "to": {
+            "type": "string",
+            "example": "0x0b5ad19cbe540d3607568C3db37a010bbe6c8134",
+            "description": "Recipient address."
+          },
+          "tokenID": {
+            "type": "string",
+            "example": "123",
+            "description": "Token ID of the NFT."
+          },
+          "tokenName": {
+            "type": "string",
+            "example": "CryptoPunk",
+            "description": "Name of the NFT."
+          },
+          "tokenSymbol": {
+            "type": "string",
+            "example": "PUNK",
+            "description": "Symbol of the NFT."
+          },
+          "tokenDecimal": {
+            "type": "string",
+            "example": "0",
+            "description": "Decimal places of the NFT (typically 0)."
+          },
+          "transactionIndex": {
+            "type": "string",
+            "example": "0",
+            "description": "Index of the transaction in the block.",
+            "nullable": true
+          },
+          "gas": {
+            "type": "string",
+            "example": "862860",
+            "description": "Gas provided.",
+            "nullable": true
+          },
+          "gasPrice": {
+            "type": "string",
+            "example": "44339373968",
+            "description": "Gas price in wei.",
+            "nullable": true
+          },
+          "gasUsed": {
+            "type": "string",
+            "example": "812811",
+            "description": "Gas used.",
+            "nullable": true
+          },
+          "cumulativeGasUsed": {
+            "type": "string",
+            "example": "812811",
+            "description": "Cumulative gas used in the block.",
+            "nullable": true
+          },
+          "input": {
+            "type": "string",
+            "example": "deprecated",
+            "description": "Input data (may be marked as deprecated).",
+            "nullable": true
+          },
+          "confirmations": {
+            "type": "string",
+            "example": "3328937",
+            "description": "Number of block confirmations.",
+            "nullable": true
+          }
+        },
+        "required": [
+          "blockNumber",
+          "timeStamp",
+          "hash",
+          "from",
+          "contractAddress",
+          "to",
+          "tokenID",
+          "tokenName",
+          "tokenSymbol",
+          "tokenDecimal"
+        ]
+      },
+      "ERC1155TransferEvent": {
+        "type": "object",
+        "properties": {
+          "blockNumber": {
+            "type": "string",
+            "example": "19436867",
+            "description": "Block number where the transfer occurred."
+          },
+          "timeStamp": {
+            "type": "string",
+            "example": "1710463487",
+            "description": "UNIX timestamp of the transfer."
+          },
+          "hash": {
+            "type": "string",
+            "example": "0x51e42540834734c61fbcca53352ca73102059072b8dd0399a3137e6324678ed4",
+            "description": "Transaction hash."
+          },
+          "nonce": {
+            "type": "string",
+            "example": "84",
+            "description": "Transaction nonce.",
+            "nullable": true
+          },
+          "blockHash": {
+            "type": "string",
+            "example": "0xd381d647a0ab0ec6fecbc4528bc881a4a2c1715ac8a7f300136a62a9ec5c3d11",
+            "description": "Hash of the block.",
+            "nullable": true
+          },
+          "from": {
+            "type": "string",
+            "example": "0xfb3b5a0e03ae12c41492d70bd210e65d25cc01dc",
+            "description": "Sender address."
+          },
+          "contractAddress": {
+            "type": "string",
+            "example": "0x9adc7710e9d1b29d8a78c04d52d32532297c2ef3",
+            "description": "ERC1155 contract address."
+          },
+          "to": {
+            "type": "string",
+            "example": "0x0b5ad19cbe540d3607568C3db37a010bbe6c8134",
+            "description": "Recipient address."
+          },
+          "tokenID": {
+            "type": "string",
+            "example": "123",
+            "description": "Token ID of the ERC1155 token."
+          },
+          "tokenValue": {
+            "type": "string",
+            "example": "1",
+            "description": "Number of tokens transferred."
+          },
+          "tokenName": {
+            "type": "string",
+            "example": "Enjin",
+            "description": "Name of the token."
+          },
+          "tokenSymbol": {
+            "type": "string",
+            "example": "ENJ",
+            "description": "Symbol of the token."
+          },
+          "transactionIndex": {
+            "type": "string",
+            "example": "0",
+            "description": "Index of the transaction in the block.",
+            "nullable": true
+          },
+          "gas": {
+            "type": "string",
+            "example": "862860",
+            "description": "Gas provided.",
+            "nullable": true
+          },
+          "gasPrice": {
+            "type": "string",
+            "example": "44339373968",
+            "description": "Gas price in wei.",
+            "nullable": true
+          },
+          "gasUsed": {
+            "type": "string",
+            "example": "812811",
+            "description": "Gas used.",
+            "nullable": true
+          },
+          "cumulativeGasUsed": {
+            "type": "string",
+            "example": "812811",
+            "description": "Cumulative gas used in the block.",
+            "nullable": true
+          },
+          "input": {
+            "type": "string",
+            "example": "deprecated",
+            "description": "Input data (may be marked as deprecated).",
+            "nullable": true
+          },
+          "confirmations": {
+            "type": "string",
+            "example": "3328937",
+            "description": "Number of block confirmations.",
+            "nullable": true
+          }
+        },
+        "required": [
+          "blockNumber",
+          "timeStamp",
+          "hash",
+          "from",
+          "contractAddress",
+          "to",
+          "tokenID",
+          "tokenValue",
+          "tokenName",
+          "tokenSymbol"
+        ]
+      },
+      "FundingTransaction": {
+        "type": "object",
+        "properties": {
+          "blockNumber": {
+            "type": "string",
+            "example": "19436867",
+            "description": "Block number of the funding transaction."
+          },
+          "timeStamp": {
+            "type": "string",
+            "example": "1710463487",
+            "description": "UNIX timestamp of the transaction."
+          },
+          "hash": {
+            "type": "string",
+            "example": "0x51e42540834734c61fbcca53352ca73102059072b8dd0399a3137e6324678ed4",
+            "description": "Transaction hash."
+          },
+          "from": {
+            "type": "string",
+            "example": "0xfb3b5a0e03ae12c41492d70bd210e65d25cc01dc",
+            "description": "Sender address (funder)."
+          },
+          "to": {
+            "type": "string",
+            "example": "0x0b5ad19cbe540d3607568C3db37a010bbe6c8134",
+            "description": "Recipient address (funded)."
+          },
+          "value": {
+            "type": "string",
+            "example": "1000000000000000000",
+            "description": "Value transferred in wei."
+          },
+          "gas": {
+            "type": "string",
+            "example": "862860",
+            "description": "Gas provided.",
+            "nullable": true
+          },
+          "gasPrice": {
+            "type": "string",
+            "example": "44339373968",
+            "description": "Gas price in wei.",
+            "nullable": true
+          },
+          "gasUsed": {
+            "type": "string",
+            "example": "812811",
+            "description": "Gas used.",
+            "nullable": true
+          }
+        },
+        "required": [
+          "blockNumber",
+          "timeStamp",
+          "hash",
+          "from",
+          "to",
+          "value"
+        ]
+      },
+      "MinedBlock": {
+        "type": "object",
+        "properties": {
+          "blockNumber": {
+            "type": "string",
+            "example": "19436867",
+            "description": "Block number validated."
+          },
+          "timeStamp": {
+            "type": "string",
+            "example": "1710463487",
+            "description": "UNIX timestamp of the block."
+          },
+          "blockReward": {
+            "type": "string",
+            "example": "2000000000000000000",
+            "description": "Block reward in wei."
+          }
+        },
+        "required": ["blockNumber", "timeStamp", "blockReward"]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "0",
+            "description": "Error status."
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid API Key",
+            "description": "Error message."
+          },
+          "result": {
+            "type": "string",
+            "nullable": true,
+            "example": null,
+            "description": "Result field, typically null for errors."
+          }
+        },
+        "required": ["status", "message"]
+      }
+    }
+  }
+}

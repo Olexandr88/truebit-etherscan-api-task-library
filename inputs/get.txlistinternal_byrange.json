@@ -1,0 +1,21 @@
+{
+  "namespace": "",
+  "taskName": "",
+  "input": {
+    "path": "/api?chainid={chainid}&module={module}&action={action}&startblock={startBlock}&endblock={endBlock}&page={page}&offset={offset}&sort={sort}&apikey={apiKey}",
+    "method": "GET",
+    "params": {
+      "chainid": 1,
+      "module": "account",
+      "action": "txlistinternal",
+      "startBlock": 7284270,
+      "endBlock": 99999999,
+      "page": 1,
+      "offset": 100,
+      "sort": "desc",
+      "apiKey": ""
+    }
+  },
+  "executionTimeout": 10000,
+  "async": false
+}

@@ -1,0 +1,18 @@
+{
+  "namespace": "",
+  "taskName": "",
+  "input": {
+    "path": "/api?chainid={chainid}&module={module}&action={action}&address={address}&tag={tag}&apikey={apiKey}",
+    "method": "GET",
+    "params": {
+      "chainid": 1,
+      "module": "account",
+      "action": "balancemulti",
+      "address": "0x0B5Ad19cbE540d3607568C3db37a010BBE6c8134,0xfb3b5a0e03ae12c41492d70bd210e65d25cc01dc",
+      "tag": "earliest",
+      "apiKey": ""
+    }
+  },
+  "executionTimeout": 10000,
+  "async": false
+}
