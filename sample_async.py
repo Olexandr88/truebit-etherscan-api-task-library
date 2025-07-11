@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from truebit_client import TruebitClient
 import os
+import time
 
 load_dotenv()
 
@@ -28,7 +29,13 @@ data = {
       }
   },
   'executionTimeout': 10000,
-  'async': False
+  'async': True
 }
 
 response = client.api_task_execute(data)
+# Get Execution ID
+execution_id = response['executionId']
+# Wait the Task being Executed
+time.sleep(2)
+# Get API Task Status by execution
+task_status = client.get_api_task_status_by_execution_id(execution_id)
