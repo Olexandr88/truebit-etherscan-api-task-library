@@ -1,6 +1,5 @@
 
-`
-# Etherscan Truebit API task `
+# Etherscan Truebit API task
 
 This library makes it possible to utilise some of Etherscan's API v2 functionality  (accounts only):
 https://docs.etherscan.io/etherscan-v2/api-endpoints/accounts
@@ -43,11 +42,12 @@ https://devs.truebit.io/developing-truebit-tasks/writing-api-tasks
      source venv/bin/activate  # or venv\Scripts\activate on Windows
      pip install -r requirements.txt
      ```
-   Create `.env` with:
+2. **Add to the .env file**:
 	`TRUEBIT_API_KEY=<your-api-key>`
+	`TRUEBIT_NAMESPACE=<your-namespace>`
 	`ETHERSCAN_API_KEY=<etherscan-api-key>`
  
-2. **Sample usage**:
+### Sample usage:
 ```python
 from dotenv import load_dotenv
 from truebit_client import TruebitClient
@@ -81,6 +81,24 @@ data = {
   'executionTimeout': 10000,
   'async': False
 }
-
 response = client.api_task_execute(data)
+ ```
+
+### Get Etherscan Response
+```python
+etherscan_response = response['clearTextSolution']['output']
+```
+### Get Transcript
+```python
+# Get Execution ID
+execution_id = response['executionId']
+# Get transcript
+transcript = client.get_transcript_by_execution_id(execution_id)
+```
+### Find Transcript by Hash
+```python
+# Get transcript hash
+transcript_hash = client.get_transcript_hash(transcript)
+# Find transcript by hash
+transcript = client.find_transcript_by_hash(transcript_hash)
 ```

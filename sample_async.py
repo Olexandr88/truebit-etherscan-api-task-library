@@ -31,26 +31,4 @@ data = {
   'async': False
 }
 
-# Execute task
 response = client.api_task_execute(data)
-
-# Get etherscan response
-etherscan_response = response['clearTextSolution']['output']
-
-# Get Execution ID
-execution_id = response['executionId']
-# Get transcript
-transcript = client.get_transcript_by_execution_id(execution_id)
-
-# Get transcript hash
-transcript_hash = client.get_transcript_hash(transcript)
-
-# Find transcript by hash
-transcript_verified = client.find_transcript_by_hash(transcript_hash)
-
-# Get again transcript hash
-transcript_hash_verified = client.get_transcript_hash(transcript)
-
-# Verify hashes
-assert transcript == transcript_verified
-invoice = client.find_invoice_by_execution_id(execution_id)

@@ -46,6 +46,12 @@ class TruebitClient:
         except requests.exceptions.RequestException as e:
             raise TruebitAPIError(f"Network error: {str(e)}")
 
+    def get_transcript_hash(self, data):
+        for item in data['transcript']:
+            if item.get('type') == 'execution_completed':
+                return item.get('transcriptHash')
+        return None
+
     def get_function_task_status_by_execution_id(self, execution_id):
         """
         Retrieve the status of a task.
@@ -56,8 +62,6 @@ class TruebitClient:
         Returns:
             dict: Task status information.
 
-        Raises:
-            TaskStatusError: If task status retrieval fails.
         """
         return self._request("GET", f"/task/function/execution-status/{execution_id}")
 
@@ -72,8 +76,6 @@ class TruebitClient:
         Returns:
             dict: Task status information.
 
-        Raises:
-            TaskStatusError: If task status retrieval fails.
         """
         return self._request("GET", f"/task/api/execution-status/{execution_id}")
 
@@ -89,7 +91,7 @@ class TruebitClient:
         """
         return self._request("POST", "/task/api/execute-by-name", json=data)
 
-    def function_task_execute(self, verifier_config):
+    def function_task_execute(self, data):
         """
         Execute a Function Task by name.
 
@@ -100,6 +102,42 @@ class TruebitClient:
             dict: Response indicating verifier start status.
         """
         return self._request("POST", "/task/function/execute-by-name", json=data)
+
+    def get_transcript_by_execution_id(self, execution_id):
+        """
+        Returns the transcript associated with the given executionId parameter
+
+        Args:
+            execution_id (str): ID of the task to check.
+
+        Returns:
+            dict: Task Transcript information.
+        """
+        return self._request("GET", f"/task/{execution_id}/transcript")
+
+    def find_transcript_by_hash(self, transcript_hash):
+        """
+        Returns the transcript associated with the given transcript_hash parameter
+
+        Args:
+            execution_id (str): ID of the task to check.
+
+        Returns:
+            dict: Task Transcript information.
+        """
+        return self._request("GET", f"/task/hash/{transcript_hash}/transcript")
+
+    def find_invoice_by_execution_id(self, execution_id):
+        """
+        Returns the transcript invoice associated with the given executionId parameter
+
+        Args:
+            execution_id (str): ID of the task to check.
+
+        Returns:
+            dict: Transcript Invoice information.
+        """
+        return self._request("GET", f"/task/{execution_id}/transcriptInvoice")
 
     def close(self):
         """Close the HTTP session."""
