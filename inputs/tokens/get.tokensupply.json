@@ -1,0 +1,17 @@
+{
+  "namespace": "",
+  "taskName": "",
+  "input": {
+    "path": "/api?chainid={chainid}&module={module}&action={action}&contractaddress={contractaddress}&apikey={apiKey}",
+    "method": "GET",
+    "params": {
+      "chainid": 1,
+      "module": "stats",
+      "action": "tokensupply",
+      "contractaddress": "0xf65B5C5104c4faFD4b709d9D60a185eAE063276c",
+      "apiKey": ""
+    }
+  },
+  "executionTimeout": 10000,
+  "async": false
+}

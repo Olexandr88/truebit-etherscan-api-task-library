@@ -1,0 +1,230 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Etherscan V2 API - Tokens",
+    "description": "API endpoints for retrieving token-related data from Etherscan, including ERC-20 and ERC-721 token supply, balance, and inventory.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Etherscan Support",
+      "url": "https://etherscan.io/contactus"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.etherscan.io/v2",
+      "description": "Etherscan V2 API Base Url"
+    }
+  ],
+  "paths": {
+    "/api": {
+      "get": {
+        "summary": "Token Endpoints",
+        "description": "Endpoints for retrieving token-related data such as ERC-20 token supply, balance, and ERC-721 token inventory.",
+        "parameters": [
+          {
+            "name": "chainid",
+            "in": "query",
+            "description": "Chain ID of the blockchain (e.g., 1 for Ethereum Mainnet).",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "description": "Module to query (e.g., stats or account).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["stats", "account"]
+            }
+          },
+          {
+            "name": "action",
+            "in": "query",
+            "description": "Action to perform (e.g., tokensupply, tokenbalance, etc.).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "tokensupply",
+                "tokenbalance",
+                "tokensupplyhistory",
+                "tokenbalancehistory",
+                "addresstokenbalance",
+                "addresstokennftbalance",
+                "addresstokennftinventory"
+              ]
+            }
+          },
+          {
+            "name": "contractaddress",
+            "in": "query",
+            "description": "Address of the ERC-20 or ERC-721 token contract.",
+            "schema": {
+              "type": "string",
+              "example": "0x57d90b64a1a57749b0f932f1a3395792e12e7055"
+            }
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "description": "Address to check token balance or inventory for.",
+            "schema": {
+              "type": "string",
+              "example": "0xe04f27eb70e025b78871a2ad7eabe85e61212761"
+            }
+          },
+          {
+            "name": "blockno",
+            "in": "query",
+            "description": "Block number for historical data queries.",
+            "schema": {
+              "type": "integer",
+              "example": 8000000
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for paginated results (default: 1).",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "example": 1
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of records per page (max 1000 for some endpoints).",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "example": 100
+            }
+          },
+          {
+            "name": "apikey",
+            "in": "query",
+            "description": "Your Etherscan API key.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "YourApiKeyToken"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "1"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "result": {
+                      "oneOf": [
+                        {
+                          "type": "string",
+                          "description": "Token supply or balance (e.g., for tokensupply or tokenbalance).",
+                          "example": "215241526476136819398"
+                        },
+                        {
+                          "type": "array",
+                          "description": "List of tokens or inventory (e.g., for addresstokenbalance or addresstokennftinventory).",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "contractAddress": {
+                                "type": "string",
+                                "example": "0x57d90b64a1a57749b0f932f1a3395792e12e7055"
+                              },
+                              "tokenName": {
+                                "type": "string",
+                                "example": "ExampleToken"
+                              },
+                              "tokenSymbol": {
+                                "type": "string",
+                                "example": "EXT"
+                              },
+                              "balance": {
+                                "type": "string",
+                                "example": "215241526476136819398"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, e.g., invalid parameters or missing API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "0"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "NOTOK"
+                    },
+                    "result": {
+                      "type": "string",
+                      "example": "Invalid API Key"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "0"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "NOTOK"
+                    },
+                    "result": {
+                      "type": "string",
+                      "example": "Max rate limit reached"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {}
+  }
+}

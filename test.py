@@ -10,8 +10,8 @@ env_loaded = load_dotenv()
 
 def main():
     ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY")
-    API_MANIFEST = os.getenv("API_MANIFEST")
     INPUT_FOLDER = os.getenv("INPUT_FOLDER")
+    MODULE_LIST = ['accounts', 'tokens']
 
     if not env_loaded:
         print("Error: .env file not found")
@@ -25,48 +25,46 @@ def main():
         print("Error: INPUT_FOLDER not set")
         exit(1)
 
-    if not API_MANIFEST:
-        print("Error: API_MANIFEST not set")
-        exit(1)
-
     # Input folder
-    input_dir = Path(INPUT_FOLDER)
+    base_input_dir = Path(INPUT_FOLDER)
+    for module in MODULE_LIST:
+        input_dir = base_input_dir / module
+        manifest = f"api-tasks/etherscan.{module}.manifest.json"
+        # Process each JSON file
+        for json_file in input_dir.glob("*.json"):
+            with open(json_file, "r") as f:
+                try:
+                    data = json.load(f)
+                except json.JSONDecodeError:
+                    print(f"Skipping invalid JSON: {json_file.name}")
+                    continue
 
-    # Process each JSON file
-    for json_file in input_dir.glob("*.json"):
-        with open(json_file, "r") as f:
+            # Inject API key if possible
             try:
-                data = json.load(f)
-            except json.JSONDecodeError:
-                print(f"Skipping invalid JSON: {json_file.name}")
+                data["input"]["params"]["apiKey"] = ETHERSCAN_API_KEY
+            except KeyError:
+                print(f"Skipping file (missing .input.params): {json_file.name}")
                 continue
 
-        # Inject API key if possible
-        try:
-            data["input"]["params"]["apiKey"] = ETHERSCAN_API_KEY
-        except KeyError:
-            print(f"Skipping file (missing .input.params): {json_file.name}")
-            continue
+            # Write to temp file
+            temp_file = json_file.with_suffix(".temp.json")
+            with open(temp_file, "w") as f:
+                json.dump(data, f, indent=2)
 
-        # Write to temp file
-        temp_file = json_file.with_suffix(".temp.json")
-        with open(temp_file, "w") as f:
-            json.dump(data, f, indent=2)
+            try:
+                result = subprocess.run(
+                    ["truebit",  "start-api", manifest, f"{temp_file}"],
+                    check=True,
+                    capture_output=True,
+                    text=True
+                )
+                print(f"Output: {result.stdout.strip()}")
+            except subprocess.CalledProcessError as e:
+                print(f"Error: {e}")
 
-        try:
-            result = subprocess.run(
-                ["truebit",  "start-api", f"{API_MANIFEST}", f"{temp_file}"],
-                check=True,
-                capture_output=True,
-                text=True
-            )
-            print(f"Output: {result.stdout.strip()}")
-        except subprocess.CalledProcessError as e:
-            print(f"Error: {e}")
-
-        # Delete temp file
-        temp_file.unlink()
-        print(f"Deleted temp file: {temp_file.name}")
+            # Delete temp file
+            temp_file.unlink()
+            print(f"Deleted temp file: {temp_file.name}")
 
 if __name__ == "__main__":
     main()

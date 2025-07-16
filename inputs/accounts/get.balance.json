@@ -2,14 +2,13 @@
   "namespace": "",
   "taskName": "",
   "input": {
-    "path": "/api?chainid={chainid}&module={module}&action={action}&address={address}&tag={tag}&apikey={apiKey}",
+    "path": "/api?chainid={chainid}&module={module}&action={action}&address={address}&apikey={apiKey}",
     "method": "GET",
     "params": {
       "chainid": 1,
       "module": "account",
       "action": "balance",
       "address": "0x0B5Ad19cbE540d3607568C3db37a010BBE6c8134",
-      "tag": "earliest",
       "apiKey": ""
     }
   },
