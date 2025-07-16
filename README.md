@@ -1,8 +1,9 @@
 
 # Etherscan Truebit API task
+This library makes it possible to utilise some of Etherscan's API v2 functionality:
+- Accounts: https://docs.etherscan.io/etherscan-v2/api-endpoints/accounts
+- Tokens: https://docs.etherscan.io/etherscan-v2/api-endpoints/tokens
 
-This library makes it possible to utilise some of Etherscan's API v2 functionality  (accounts only):
-https://docs.etherscan.io/etherscan-v2/api-endpoints/accounts
 via truebit API Task:
 https://devs.truebit.io/developing-truebit-tasks/writing-api-tasks
 
