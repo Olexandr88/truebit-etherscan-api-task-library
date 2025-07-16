@@ -21,20 +21,30 @@ https://devs.truebit.io/developing-truebit-tasks/writing-api-tasks
 	```bash
 	truebit auth register <truebit-api-key>
 	```
-## Truebit-Etherscan API Task
+## Truebit-Etherscan API Tasks
 - Clone the repository
 	```bash
 	git clone git@github.com:DAC-CHAIN/truebit-etherscan-api-task-library.git
 	```
-- Create the API task:
+- Create "accounts" the API task:
 	```bash
 	cd truebit-etherscan-api-task-library
-	truebit create-api etherscan.accounts.manifest.json 
+	truebit create-api api-tasks/etherscan.accounts.manifest.json
 	```
-- Deploy the API task:
+- Deploy "accounts" the API task:
 	```bash
 	truebit deploy <your-namespace> etherscan-accounts --taskId <your-task-id>
 	```
+- Create "tokens" the API task:
+	```bash
+	cd truebit-etherscan-api-task-library
+	truebit create-api api-tasks/etherscan.tokens.manifest.json
+	```
+- Deploy "tokens" the API task:
+	```bash
+	truebit deploy <your-namespace> etherscan-tokens --taskId <your-task-id>
+	```
+
 ### Python Setup Instructions
 1. **Create virtual environment**:
 	Install dependencies:
