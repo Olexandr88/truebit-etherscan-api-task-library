@@ -14,8 +14,7 @@ TRUEBIT_NAMESPACE = os.getenv("TRUEBIT_NAMESPACE")  # Load Truebit Namespace
 ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY")  # Load Etherscan API key
 INPUT_FOLDER = os.getenv("INPUT_FOLDER")
 MODULE_LIST = ['accounts', 'tokens']
-FUNCTION_TASKS = ['count-uniswap-tx']
-
+FUNCTION_TASKS = ['count-uniswap-tx', 'proof-of-fund-1000']
 
 def test_function_tasks():
     # Initialize the client
@@ -23,7 +22,7 @@ def test_function_tasks():
 
     # Test Function tasks trough Truebit API endpoint
     for task_name in FUNCTION_TASKS:
-        with open("downloads/input.txt", "r") as file:
+        with open(f"downloads/{task_name}.txt", "r") as file:
             input_string = file.read().strip()
 
         data = {
@@ -37,6 +36,7 @@ def test_function_tasks():
           "async": False
         }
         task_data = client.function_task_execute(data)
+        print(task_data)
 
 def test_api_tasks():
     # Initialize the client
