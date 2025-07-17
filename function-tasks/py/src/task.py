@@ -14,7 +14,7 @@ def count_uniswap_transaction(input_string):
     return count > 10
 
 def run_task(transactions):
-    """Convert input string to integer, compute Fibonacci, and return as string."""
+    """Count Uniswap transactions and return True if there's more than 10 Uniswap tx."""
     return count_uniswap_transaction(transactions)
 
 def main():
@@ -30,7 +30,7 @@ def main():
         return
 
     try:
-        output_string = run_task(json.loads(input_string))
+        output_string = str(run_task(json.loads(input_string)))
     except Exception as e:
         print(f"An error occurred while processing the input: {e}")
         return
