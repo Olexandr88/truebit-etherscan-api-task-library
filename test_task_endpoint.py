@@ -14,7 +14,11 @@ TRUEBIT_NAMESPACE = os.getenv("TRUEBIT_NAMESPACE")  # Load Truebit Namespace
 ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY")  # Load Etherscan API key
 INPUT_FOLDER = os.getenv("INPUT_FOLDER")
 MODULE_LIST = ['accounts', 'tokens']
-FUNCTION_TASKS = ['count-uniswap-tx', 'proof-of-fund-1000']
+FUNCTION_TASKS = ['count-uniswap-tx-10', 'proof-of-fund-1000']
+
+GREEN = "\033[38;2;154;205;50m"
+RED = "\033[91m"
+RESET = "\033[0m"
 
 def test_function_tasks():
     # Initialize the client
@@ -35,8 +39,14 @@ def test_function_tasks():
           "taskRequesterTimestamp": int(datetime.now().timestamp()),
           "async": False
         }
-        task_data = client.function_task_execute(data)
-        print(task_data)
+        print(f"Test Function Task {task_name}", end=" ")
+        try:
+            resp = client.function_task_execute(data)
+        except Exception as e:
+            print(e)
+            print(f"{RED}✗ Failed{RESET}")
+        else:
+            print(f"{GREEN}✓ Passed{RESET}")
 
 def test_api_tasks():
     # Initialize the client
@@ -56,9 +66,17 @@ def test_api_tasks():
                     data['input']['params']['apiKey'] = ETHERSCAN_API_KEY
                     data['namespace'] = TRUEBIT_NAMESPACE
                     data['taskName'] = f"etherscan-{module}"
-                    task_data = client.api_task_execute(data)
+                    print(f"Test API Task etherscan-{module} endpoint {data['input']['params']['action']}", end=" ")
+                    try:
+                        resp = client.api_task_execute(data)
+                    except Exception as e:
+                        print(e)
+                        print(f"{RED}✗ Failed{RESET}")
+                    else:
+                        print(f"{GREEN}✓ Passed{RESET}")
 def main():
     test_function_tasks()
+    test_api_tasks()
 
 if __name__ == "__main__":
     main()
