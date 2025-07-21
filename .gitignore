@@ -209,3 +209,5 @@ __marimo__/
 # Main
 main.py
 truebit-etherscan-api-task-library.code-workspace
+
+node_modules/

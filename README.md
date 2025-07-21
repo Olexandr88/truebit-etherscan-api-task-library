@@ -8,7 +8,7 @@ This library makes it possible to utilise some of Etherscan's API v2 functionali
 via truebit API Task:
 https://devs.truebit.io/developing-truebit-tasks/writing-api-tasks
 
-## Setup
+## Truebit Setup
 - Register into Truebit and create an account: https://devs.truebit.io/getting-started/get-started
 - Create a `TRUEBIT_NAMESPACE`:
 	```bash
@@ -158,4 +158,25 @@ data = {
   'async': False
 }
 task_data = client.function_task_execute(data)
+```
+
+### JavaScript Setup Instructions
+
+Install dependencies
+```bash
+npm install
+```
+
+This will install all required packages, including `dotenv` and `axios`.
+
+Replace the values with your actual API keys and namespace.
+
+Run the samples
+```bash
+npm run sample
+```
+
+Run the asynchronous sample:
+```bash
+npm run sample-async
 ```

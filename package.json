@@ -1,0 +1,16 @@
+{
+  "name": "truebit-etherscan-api-task-library-js",
+  "version": "1.0.0",
+  "description": "JS port of Truebit Etherscan API Task Library samples.",
+  "main": "sample.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node sample.js",
+    "sample": "node sample.js",
+    "sample-async": "node sample_async.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.5"
+  }
+} 
