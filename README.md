@@ -23,31 +23,31 @@ via truebit API Task:
 ## Truebit Setup
 Register into Truebit and create an account: https://devs.truebit.io/getting-started/get-started
 Create a `TRUEBIT_NAMESPACE`:
-	```bash
-	truebit namespace register <your-namespace>
-	```
+```bash
+truebit namespace register <your-namespace>
+```
 Create a `TRUEBIT_API_KEY`:
-	```bash
-	truebit auth new-apikey
-	```
+```bash
+truebit auth new-apikey
+```
 Register your `TRUEBIT_API_KEY`:
-	```bash
-	truebit auth register <truebit-api-key>
-	```
+```bash
+truebit auth register <truebit-api-key>
+```
 ## Truebit-Etherscan API Task
 Clone the repository
-	```bash
-	git clone git@github.com:DAC-CHAIN/truebit-etherscan-api-task-library.git
-	```
+```bash
+git clone git@github.com:DAC-CHAIN/truebit-etherscan-api-task-library.git
+```
 Create the API task:
-	```bash
-	cd truebit-etherscan-api-task-library
-	truebit create-api etherscan.accounts.manifest.json 
-	```
+```bash
+cd truebit-etherscan-api-task-library
+truebit create-api etherscan.accounts.manifest.json 
+```
 Deploy the API task:
-	```bash
-	truebit deploy <your-namespace> etherscan-accounts --taskId <your-task-id>
-	```
+```bash
+truebit deploy <your-namespace> etherscan-accounts --taskId <your-task-id>
+```
 ### Python Setup Instructions
 **Create virtual environment**:
 Install dependencies:
