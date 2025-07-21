@@ -1,14 +1,14 @@
 # Truebit Task library
 
-[Introduction](#Introduction)
-[Truebit Setup](#Truebit-Setup)
-[Truebit-Etherscan API Task](#Truebit-Etherscan-API-Task)
-[Python Setup Instructions](#Python-Setup-Instructions)
-[Python Sample usage](#Python-Sample-usage)
-[Truebit Function Tasks](#Truebit-Function-Tasks)
-[Proof of fund ERC-20](#Proof-of-fund-ERC-20)
-[Count Uniswap Transactions](#Count-Uniswap-Transactions)
-[JavaScript Setup Instructions](#JavaScript-Setup-Instructions)
+- [Introduction](#Introduction)
+- [Truebit Setup](#Truebit-Setup)
+- [Truebit-Etherscan API Task](#Truebit-Etherscan-API-Task)
+- [Python Setup Instructions](#Python-Setup-Instructions)
+- [Python Sample usage](#Python-Sample-usage)
+- [Truebit Function Tasks](#Truebit-Function-Tasks)
+- [Proof of fund ERC-20](#Proof-of-fund-ERC-20)
+- [Count Uniswap Transactions](#Count-Uniswap-Transactions)
+- [JavaScript Setup Instructions](#JavaScript-Setup-Instructions)
 
 ## Introduction
 
