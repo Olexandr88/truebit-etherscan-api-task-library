@@ -50,12 +50,13 @@ Deploy the API task:
 	```
 ### Python Setup Instructions
 **Create virtual environment**:
-	Install dependencies:
-     ```bash
-     python -m venv venv
-     source venv/bin/activate  # or venv\Scripts\activate on Windows
-     pip install -r requirements.txt
-     ```
+Install dependencies:
+ ```bash
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
+ ```
+
 **Add to the .env file**:
 ```bash
 TRUEBIT_API_KEY=<your-api-key>
