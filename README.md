@@ -9,6 +9,7 @@
 - [Proof of fund ERC-20](#Proof-of-fund-ERC-20)
 - [Count Uniswap Transactions](#Count-Uniswap-Transactions)
 - [JavaScript Setup Instructions](#JavaScript-Setup-Instructions)
+- [Truebit powered Aidrop](Truebit-powered-Aidrop)
 
 ## Introduction
 
@@ -20,45 +21,47 @@ via truebit API Task:
 - https://devs.truebit.io/developing-truebit-tasks/writing-api-tasks
 
 ## Truebit Setup
-- Register into Truebit and create an account: https://devs.truebit.io/getting-started/get-started
-- Create a `TRUEBIT_NAMESPACE`:
+Register into Truebit and create an account: https://devs.truebit.io/getting-started/get-started
+Create a `TRUEBIT_NAMESPACE`:
 	```bash
 	truebit namespace register <your-namespace>
 	```
-- Create a `TRUEBIT_API_KEY`:
+Create a `TRUEBIT_API_KEY`:
 	```bash
 	truebit auth new-apikey
 	```
-- Register your `TRUEBIT_API_KEY`:
+Register your `TRUEBIT_API_KEY`:
 	```bash
 	truebit auth register <truebit-api-key>
 	```
 ## Truebit-Etherscan API Task
-- Clone the repository
+Clone the repository
 	```bash
 	git clone git@github.com:DAC-CHAIN/truebit-etherscan-api-task-library.git
 	```
-- Create the API task:
+Create the API task:
 	```bash
 	cd truebit-etherscan-api-task-library
 	truebit create-api etherscan.accounts.manifest.json 
 	```
-- Deploy the API task:
+Deploy the API task:
 	```bash
 	truebit deploy <your-namespace> etherscan-accounts --taskId <your-task-id>
 	```
 ### Python Setup Instructions
-1. **Create virtual environment**:
+**Create virtual environment**:
 	Install dependencies:
      ```bash
      python -m venv venv
      source venv/bin/activate  # or venv\Scripts\activate on Windows
      pip install -r requirements.txt
      ```
-2. **Add to the .env file**:
-	`TRUEBIT_API_KEY=<your-api-key>`
-	`TRUEBIT_NAMESPACE=<your-namespace>`
-	`ETHERSCAN_API_KEY=<etherscan-api-key>`
+**Add to the .env file**:
+```bash
+TRUEBIT_API_KEY=<your-api-key>
+TRUEBIT_NAMESPACE=<your-namespace>
+ETHERSCAN_API_KEY=<etherscan-api-key>
+```
  
 ### Python Sample usage
 ```python
@@ -195,4 +198,16 @@ npm run sample
 - Run the asynchronous sample:
 ```bash
 npm run sample-async
+```
+## Truebit powered Aidrop
+
+Python
+
+```python
+    python airdrop.py --address-list 0xAddress1 0xAddress2 0xAddress3
+```
+
+Javascript
+```javascript
+   node airdrop.js --address-list 0xAddress1 0xAddress2 0xAddress3
 ```
