@@ -1,14 +1,14 @@
 # Truebit Task library
 
 [Introduction](#Introduction)
-[Truebit Setup](#Truebit Setup)
-[Truebit-Etherscan API Task](#Truebit-Etherscan API Task)
-[Python Setup Instructions](#Python Setup Instructions)
-[Python Sample usage](#Python Sample usage)
-[Truebit Function Tasks](#Truebit Function Tasks)
-[Proof of fund ERC-20](#Proof of fund ERC-20)
-[Count Uniswap Transactions](#Count Uniswap Transactions)
-[JavaScript Setup Instructions](#JavaScript Setup Instructions)
+[Truebit Setup](#Truebit-Setup)
+[Truebit-Etherscan API Task](#Truebit-Etherscan-API-Task)
+[Python Setup Instructions](#Python-Setup-Instructions)
+[Python Sample usage](#Python-Sample-usage)
+[Truebit Function Tasks](#Truebit-Function-Tasks)
+[Proof of fund ERC-20](#Proof-of-fund-ERC-20)
+[Count Uniswap Transactions](#Count-Uniswap-Transactions)
+[JavaScript Setup Instructions](#JavaScript-Setup-Instructions)
 
 ## Introduction
 
@@ -97,28 +97,32 @@ data = {
 response = client.api_task_execute(data)
  ```
 
-Get Etherscan Response
+**Get Etherscan Response**
+
 ```python
 etherscan_response = response['clearTextSolution']['output']
 ```
 
-Get Transcript
+**Get Transcript**
+
 ```python
-Get Execution ID
+# Get Execution ID
 execution_id = response['executionId']
 
-Get transcript
+# Get transcript
 transcript = client.get_transcript_by_execution_id(execution_id)
 ```
 
-Find Transcript by Hash
+**Find Transcript by Hash**
+
 ```python
-Get transcript hash
+# Get transcript hash
 transcript_hash = client.get_transcript_hash(transcript)
 
-Find transcript by hash
+# Find transcript by hash
 transcript = client.find_transcript_by_hash(transcript_hash)
 ```
+
 ## Truebit Function Tasks
 Two examples of truebit tasks making use of the data obtained via the truebit-etherscan api tasks are provided. Two simple examples are provided:
 
