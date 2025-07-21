@@ -9,7 +9,7 @@
 - [Proof of fund ERC-20](#Proof-of-fund-ERC-20)
 - [Count Uniswap Transactions](#Count-Uniswap-Transactions)
 - [JavaScript Setup Instructions](#JavaScript-Setup-Instructions)
-- [Truebit powered Aidrop](Truebit-powered-Aidrop)
+- [Truebit powered Airdrop](Truebit-powered-Airdrop)
 
 ## Introduction
 
