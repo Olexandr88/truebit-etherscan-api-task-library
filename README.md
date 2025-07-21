@@ -185,18 +185,18 @@ task_data = client.function_task_execute(data)
 
 ### JavaScript Setup Instructions
 
-- Install dependencies
+Install dependencies
 ```bash
 npm install
 ```
 This will install all required packages, including `dotenv` and `axios`.
 
-- Run the sample
+Run the sample
 ```bash
 npm run sample
 ```
 
-- Run the asynchronous sample:
+Run the asynchronous sample:
 ```bash
 npm run sample-async
 ```
@@ -205,10 +205,10 @@ npm run sample-async
 Python
 
 ```python
-    python airdrop.py --address-list 0xAddress1 0xAddress2 0xAddress3
+python airdrop.py --address-list 0xAddress1 0xAddress2 0xAddress3
 ```
 
 Javascript
 ```javascript
-   node airdrop.js --address-list 0xAddress1 0xAddress2 0xAddress3
+node airdrop.js --address-list 0xAddress1 0xAddress2 0xAddress3
 ```
