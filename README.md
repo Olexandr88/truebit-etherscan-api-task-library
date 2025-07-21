@@ -1,12 +1,23 @@
+# Truebit Task library
 
-# Etherscan Truebit API task
+[Introduction](#Introduction)
+[Truebit Setup](#Truebit Setup)
+[Truebit-Etherscan API Task](#Truebit-Etherscan API Task)
+[Python Setup Instructions](#Python Setup Instructions)
+[Python Sample usage](#Python Sample usage)
+[Truebit Function Tasks](#Truebit Function Tasks)
+[Proof of fund ERC-20](#Proof of fund ERC-20)
+[Count Uniswap Transactions](#Count Uniswap Transactions)
+[JavaScript Setup Instructions](#JavaScript Setup Instructions)
+
+## Introduction
 
 This library makes it possible to utilise some of Etherscan's API v2 functionality:
 - Accounts: https://docs.etherscan.io/etherscan-v2/api-endpoints/accounts
 - Tokens: https://docs.etherscan.io/etherscan-v2/api-endpoints/tokens
 
 via truebit API Task:
-https://devs.truebit.io/developing-truebit-tasks/writing-api-tasks
+- https://devs.truebit.io/developing-truebit-tasks/writing-api-tasks
 
 ## Truebit Setup
 - Register into Truebit and create an account: https://devs.truebit.io/getting-started/get-started
@@ -49,7 +60,7 @@ https://devs.truebit.io/developing-truebit-tasks/writing-api-tasks
 	`TRUEBIT_NAMESPACE=<your-namespace>`
 	`ETHERSCAN_API_KEY=<etherscan-api-key>`
  
-### Sample usage:
+### Python Sample usage
 ```python
 from dotenv import load_dotenv
 from truebit_client import TruebitClient
@@ -86,22 +97,26 @@ data = {
 response = client.api_task_execute(data)
  ```
 
-### Get Etherscan Response
+Get Etherscan Response
 ```python
 etherscan_response = response['clearTextSolution']['output']
 ```
-### Get Transcript
+
+Get Transcript
 ```python
-# Get Execution ID
+Get Execution ID
 execution_id = response['executionId']
-# Get transcript
+
+Get transcript
 transcript = client.get_transcript_by_execution_id(execution_id)
 ```
-### Find Transcript by Hash
+
+Find Transcript by Hash
 ```python
-# Get transcript hash
+Get transcript hash
 transcript_hash = client.get_transcript_hash(transcript)
-# Find transcript by hash
+
+Find transcript by hash
 transcript = client.find_transcript_by_hash(transcript_hash)
 ```
 ## Truebit Function Tasks
@@ -131,7 +146,7 @@ Deploy the task
 truebit deploy <your-namespace> count-uniswap-tx-10 --taskId <your-task-id>
 ```
 
-### Sample Usage
+Sample Usage
 ```python
 from dotenv import load_dotenv
 from truebit_client import TruebitClient
@@ -162,21 +177,18 @@ task_data = client.function_task_execute(data)
 
 ### JavaScript Setup Instructions
 
-Install dependencies
+- Install dependencies
 ```bash
 npm install
 ```
-
 This will install all required packages, including `dotenv` and `axios`.
 
-Replace the values with your actual API keys and namespace.
-
-Run the samples
+- Run the sample
 ```bash
 npm run sample
 ```
 
-Run the asynchronous sample:
+- Run the asynchronous sample:
 ```bash
 npm run sample-async
 ```
