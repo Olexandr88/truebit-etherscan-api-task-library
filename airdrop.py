@@ -54,6 +54,7 @@ def run_airdrop(address_list):
         }
         # call Etherscan Truebit API task
         response1 = client.api_task_execute(input_data_task1)
+        balance = response1['clearTextSolution']['output']['result']
         intput_data_task2 = {
           "namespace": TRUEBIT_NAMESPACE,
           "taskName": "proof-of-fund-1000",
@@ -91,7 +92,6 @@ def run_airdrop(address_list):
             }
             response3 = client.api_task_execute(input_data_task3)
             if response3['clearTextSolution']['output']:
-                balance = response1['clearTextSolution']['output']['result']
                 new_balance = int(balance) / (10 ** 18)*RATIO
             else:
                 new_balance = int(balance)
